@@ -27,6 +27,24 @@ const getAllTasks = function () {
 };
 exports.getAllTasks = getAllTasks;
 
+const searchAllTasks = function (value){
+    return new Promise(function (resolve, reject){
+        db.serialize(()=>{
+            db.all(`select * from todolist where todoitem like "%`+value+`%";`, [], function(err, rows){
+                if (err) {
+                    console.error(err.message);
+                    reject(err);
+                }
+                else {
+                    console.log('Query successfully completed.(searchTask)');
+                    resolve(rows);
+                }
+            });
+        })
+    })
+}
+exports.searchAllTasks = searchAllTasks;
+
 const insertTask = function (value) {
     console.log("Inserting..");
     return new Promise(function(resolve,reject){

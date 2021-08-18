@@ -28,12 +28,23 @@ var abl = function (){
     document.getElementById('todoitem_ekle').addEventListener('click', function () {
         console.log("ping");
         var inputValue = document.getElementById('todoitem_input').value;
+        var toDoList = document.getElementById('todolist');
+        toDoList.innerHTML = '';
         if (inputValue) {
-            dbu.insertTask(inputValue).then(data => {
-                console.log(`A row has been inserted with id: ${data.lastRowID}`);
-                document.getElementById('todoitem_input').value = ''; // clear input
-                loadList(); // reload list
-            });
+            // dbu.insertTask(inputValue).then(data => {
+            //     console.log(`A row has been inserted with id: ${data.lastRowID}`);
+            //     document.getElementById('todoitem_input').value = ''; // clear input
+            //     loadList(); // reload list
+            // });
+            dbu.searchAllTasks(inputValue).then(data =>{
+                for(var i = 0;i < data.length;i++){
+                    var liNode = createLi(data[i].todoitem, data[i].id, data[i].type);
+                    toDoList.appendChild(liNode);
+                }
+                cbl(); // add listeners to new items
+                dbl(); // add listeners to new items
+                changeStatus();
+            })
         }
     });
 }
@@ -97,7 +108,7 @@ var push1K = function(){
 loadList();
 abl();
 console.log("before push");
-push1K();
+//push1K();
 // About Button
 document.getElementsByClassName('about')[0].addEventListener('click', function () {
     Swal.fire({
