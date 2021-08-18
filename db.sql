@@ -1,8 +1,8 @@
-CREATE TABLE "gorevler" (
+CREATE TABLE "todolist" (
 	"id"	INTEGER NOT NULL,
-	"gorev"	TEXT NOT NULL,
+	"todoitem"	TEXT NOT NULL,
 	"type"	INTEGER NOT NULL DEFAULT 0,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 
-INSERT INTO `gorevler` (`gorev`,`type`) VALUES ('Bitter Çikolata alacağım',0),('Test TO-DO Item',0);
+INSERT INTO `todolist` (`todoitem`,`type`) VALUES ('Combinativ Softworks',1),('Test TO-DO Item',0);

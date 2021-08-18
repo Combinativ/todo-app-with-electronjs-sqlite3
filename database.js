@@ -12,7 +12,7 @@ var db = new sqlite3.Database('database.db', (err) => {
 const getAllTasks = function () {
     return new Promise(function(resolve,reject){
         db.serialize(() => {
-            db.all(`SELECT * FROM gorevler ORDER BY type ASC`, [], (err, rows) => {
+            db.all(`SELECT * FROM todolist ORDER BY type ASC`, [], (err, rows) => {
                 if (err) {
                     console.error(err);
                     reject('error');
@@ -28,9 +28,10 @@ const getAllTasks = function () {
 exports.getAllTasks = getAllTasks;
 
 const insertTask = function (value) {
+    console.log("Inserting..");
     return new Promise(function(resolve,reject){
         db.serialize(() => {
-            db.run(`INSERT INTO gorevler(gorev) VALUES(?)`, [value], function (err) {
+            db.run(`INSERT INTO todolist(todoitem) VALUES(?)`, [value], function (err) {
                 if (err) {
                     console.error(err.message);
                     reject(err);
@@ -47,7 +48,7 @@ exports.insertTask = insertTask;
 
 const deleteTask = function (id) {
     return new Promise(function(resolve,reject){
-        db.run(`DELETE FROM gorevler WHERE id=?`, id, function (err) {
+        db.run(`DELETE FROM todolist WHERE id=?`, id, function (err) {
             if (err) {
                 console.error(err.message);
                 reject(err);
@@ -63,7 +64,7 @@ exports.deleteTask = deleteTask;
 
 const updateTask = function (id, bool) {
     return new Promise(function(resolve,reject){
-        db.run(`UPDATE 'gorevler' SET type=? WHERE id=?`, [bool, id], function (err) {
+        db.run(`UPDATE 'todolist' SET type=? WHERE id=?`, [bool, id], function (err) {
             if (err) {
                 console.error(err.message);
             }

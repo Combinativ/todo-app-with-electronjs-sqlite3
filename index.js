@@ -4,10 +4,10 @@ var dbu = require('./database');
 var Swal = require('sweetalert2');
 
 var Placeholder = function () {
-    var placeholder = ["Bir dil öğreneceğim", "Kitap okuyacağım", "Yürüyüşe çıkacağım", "Yeni şeyler keşfedeceğim", "Ders çalışacağım", "Resim çizeceğim", "Çikolata yiyeceğim", "Kahve içeceğim."];
+    var placeholder = ["Olympic sports", "Combinativ Softworks", "ElectronJS", "SQLite3"];
     var i = Math.floor(Math.random() * placeholder.length);
-    document.getElementById('gorev_input').placeholder = placeholder[i];
-    ///$('gorev_input').attr('placeholder', placeholder[i]); // with jQuery
+    document.getElementById('todoitem_input').placeholder = placeholder[i];
+    ///$('todoitem_input').attr('placeholder', placeholder[i]); // with jQuery
 };
 setInterval(function () {
     Placeholder();
@@ -15,7 +15,7 @@ setInterval(function () {
 
 // listeners
 var cbl = function () {
-    document.querySelectorAll('input[id^="gorev-"]').forEach(function (item) {
+    document.querySelectorAll('input[id^="todoitem-"]').forEach(function (item) {
         item.addEventListener('change', function () {
             dbu.updateTask(item.dataset.id, (item.checked) ? 1 : 0).then(data => {
                 console.log(data, item.checked);
@@ -25,12 +25,13 @@ var cbl = function () {
 }
 
 var abl = function (){
-    document.getElementById('gorev_ekle').addEventListener('click', function () {
-        var inputValue = document.getElementById('gorev_input').value;
+    document.getElementById('todoitem_ekle').addEventListener('click', function () {
+        console.log("ping");
+        var inputValue = document.getElementById('todoitem_input').value;
         if (inputValue) {
             dbu.insertTask(inputValue).then(data => {
                 console.log(`A row has been inserted with id: ${data.lastRowID}`);
-                document.getElementById('gorev_input').value = ''; // clear input
+                document.getElementById('todoitem_input').value = ''; // clear input
                 loadList(); // reload list
             });
         }
@@ -58,7 +59,7 @@ var changeStatus = function (value) {
 // create to-do item
 var createLi = function (value, id, complete) {
     var LiNode = document.createElement('li');
-    LiNode.innerHTML = "<input id='gorev-" + id + "' type='checkbox' data-id='" + id + "' " + ((complete) ? 'checked' : '') + "/><label for='gorev-" + id + "'> <h2> " + value + " </h2></label> <span class=\"deletebttn\" data-id=\"" + id + "\"> <strong>\u2718</strong> </span>";
+    LiNode.innerHTML = "<input id='todoitem-" + id + "' type='checkbox' data-id='" + id + "' " + ((complete) ? 'checked' : '') + "/><label for='todoitem-" + id + "'> <h2> " + value + " </h2></label> <span class=\"deletebttn\" data-id=\"" + id + "\"> <strong>\u2718</strong> </span>";
     return LiNode;
 };
 
@@ -69,7 +70,7 @@ var loadList = function () {
     dbu.getAllTasks().then((data) => {
         toDoList.innerHTML = '';
         for(var i = 0;i < data.length;i++){
-            var liNode = createLi(data[i].gorev, data[i].id, data[i].type);
+            var liNode = createLi(data[i].todoitem, data[i].id, data[i].type);
             toDoList.appendChild(liNode);
         }
         cbl(); // add listeners to new items
