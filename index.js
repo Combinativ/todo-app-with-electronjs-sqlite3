@@ -2,7 +2,7 @@
 
 var dbu = require('./database');
 var Swal = require('sweetalert2');
-
+var faker = require('faker');
 var Placeholder = function () {
     var placeholder = ["Olympic sports", "Combinativ Softworks", "ElectronJS", "SQLite3"];
     var i = Math.floor(Math.random() * placeholder.length);
@@ -53,7 +53,8 @@ var dbl = function (){
 // change status
 var changeStatus = function (value) {
     var status = document.getElementById('status');
-    status.innerText = (value === undefined || value === '' || value === null) ? 'Hazır.' : value;
+    console.log(status, value);
+    status.innerText = (value === undefined || value === '' || value === null) ? 'Ready.' : value;
 };
 
 // create to-do item
@@ -78,18 +79,32 @@ var loadList = function () {
         changeStatus();
     });
 };
-
+var push1K = function(){
+    for (let index = 0; index < 1000; index++) {
+        changeStatus("Pushing 1000 datasets...");
+        var fakeLoad = faker.commerce.productName();
+        dbu.insertTask(fakeLoad).then(data => {
+            changeStatus(`A row has been inserted with id: ${data.lastRowID}`);
+            console.log(`A row has been inserted with id: ${data.lastRowID}`);
+            document.getElementById('todoitem_input').value = ''; // clear input
+            loadList(); // reload list
+        });
+        
+    }
+    changeStatus();
+}
 // startup
 loadList();
 abl();
-
+console.log("before push");
+push1K();
 // About Button
 document.getElementsByClassName('about')[0].addEventListener('click', function () {
     Swal.fire({
-        title: '<strong style="color:white;">Geliştiriciler</strong>',
+        title: '<strong style="color:white;">Combinativ Softworks</strong>',
         html: '<a href="https://github.com/merchizm">Merchizm</a> <br/><a href="https://github.com/Zynpnaz">Zeyish</a>',
         background: `#000 url('https://www.merich.rocks/wp-content/uploads/2020/12/Safari-Background_Emoji_Vacation.jpg')`,
         confirmButtonColor:'#6CA5EA',
-        confirmButtonText:'Kapat'
+        confirmButtonText:'Ok'
     });
 });
